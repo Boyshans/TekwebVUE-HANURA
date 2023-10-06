@@ -46,7 +46,12 @@
 
             <div class="w-full lg:w-3/5 min-h-screen lg:p-10 flex flex-col h-[200px]">
                 <!-- Konten untuk "product" -->
-                <h1 class="text-center">Product Section</h1>
+                <div class="text-center">
+                  <hr class="w-1/4 h-0.5 bg-blue-700 inline-block">
+                  <h1 class="text-blue-700 font-bold text-4xl inline-block px-5">MENU</h1>
+                  <hr class="w-1/4 h-0.5 bg-blue-700 inline-block">
+                </div>
+                
 
                 <div class="mt-14 px-8 grid grid-cols-2 gap-x-4 gap-y-4 sm:grid-cols-1 lg:grid-cols-2 md:gap-x-4 xl:gap-x-4">
                     <div v-for="(product, index) in products" :key="index" class="rounded-lg max-w-md overflow-hidden  bg-white shadow-md dark:bg-slate-100 text-center hover:shadow-2xl">
@@ -74,13 +79,14 @@
 
             <div class="w-full lg:w-2/5 shadow-lg lg:p-5 flex flex-col">
                 <div class="text-center">
-                    <h1 class="text-center mt-5">Carting Section</h1>
+                    <h1 class="text-center mt-2 text-blue-700 font-bold text-2xl inline-block px-4">Carting Section</h1>
                     <!-- Masukkan konten "carting" Anda di sini -->
                 </div>
 
                 <div class="flex flex-row items-center justify-between px-5 mt-5 border-b-2">
                     <div>
-                        <span class="font-bold text-xl">Current Order</span>
+                        <span class="font-bold text-xl">Current</span>
+                        <span class="font-bold text-xl text-blue-700">Order</span>
                     </div>
 
                     <div class="font-semibold my-4">
@@ -90,94 +96,131 @@
                     </div>
                 </div>
 
-          <!-- Table responsive wrapper -->
-          <div class="overflow-x-auto bg-white dark:bg-slate-100 h-[270px] overflow-y-scroll">
-            <table class="min-w-full text-left text-sm whitespace-nowrap">
-              <thead class="uppercase tracking-wider sticky top-0 bg-white dark:bg-slate-50 outline outline-2 outline-neutral-200 dark:outline-neutral-600">
-                <tr>
-                  <th scope="col" class="px-6 py-4">
-                    Product
-                  </th>
-                  <th scope="col" class="px-6 py-4">
-                    Price
-                  </th>
-                  <th scope="col" class="px-6 py-4">
-                    Quantity
-                  </th>
-                  <th scope="col" class="px-6 py-4">
-                    Total
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="(item, index) in cart" :key="index" class="border-b dark:border-slate-500 ">
-                  <td class="px-6 py-4 text-blue-700">
-                    {{ item.name }}
-                  </td>
-                  <td class="px-6 py-4">RP{{ item.price.toFixed(2) }}</td>
-                  <td class="px-6 py-4">{{ item.quantity }}</td>
-                  <td class="px-6 py-4">RP {{ (item.quantity * item.price).toFixed(2) }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-    </div>
+        
+         <!-- Table responsive wrapper -->
+<div class="overflow-x-auto bg-white dark:bg-slate-100 h-[270px] overflow-y-scroll">
+  <table class="min-w-full text-left text-sm whitespace-nowrap">
+    <thead class="uppercase tracking-wider sticky top-0 bg-white dark:bg-slate-50 outline outline-2 outline-neutral-200 dark:outline-neutral-600">
+      <tr>
+        <th scope="col" class="px-6 py-4">
+          Product
+        </th>
+        <th scope="col" class="px-6 py-4">
+          Price
+        </th>
+        <th scope="col" class="px-6 py-4">
+          Quantity
+        </th>
+        <th scope="col" class="px-6 py-4">
+          Total
+        </th>
+        <th scope="col" class="px-6 py-4">
+          Actions
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(item, index) in cart" :key="index" class="border-b dark:border-slate-500">
+        <td class="px-6 py-4 text-blue-700">
+          {{ item.name }}
+        </td>
+        <td class="px-6 py-4">RP{{ item.price.toFixed(2) }}</td>
+        <td class="px-6 py-4">{{ item.quantity }}</td>
+        <td class="px-6 py-4">RP{{ (item.quantity * item.price).toFixed(2) }}</td>
+        <td class="px-6 py-4">
+          <button @click="removeFromCart(index)" class="text-red-600 hover:text-red-700">
+            Hapus
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+          <!-- Tabel Total Harga dan Tombol Bayar -->
+    <div class="mt-4  ">
+      <table class="w-full text-left text-base">
+        <tbody>
+          <tr>
+            <td class="text-left pr-2 font-semibold">Total Price:</td>
+            <td class="px-4  mt-2 bg-green-600 text-white py-2 rounded">RP{{ total.toFixed(2) }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <button @click="pay" class="mt-2 bg-blue-700 text-white py-2 px-4 rounded hover:bg-blue-800">
+        Bayar
+      </button>
+</div>
+</div>
+</div>
+
+
+
+
 
     <script>
       const { createApp, ref } = Vue;
 
       const app = createApp({
-                data() {
-                  return {
-                    products: [
-                      {
-                        name: 'BURGER',
-                        image: 'MENU/Burger.jpg',
-                        price: 'RP30.000', // Tambahkan harga untuk Product 1
-                      },
-                      {
-                        name: 'PIZZA',
-                        image: 'MENU/hawaiian-pizza.jpg',
-                        price: 'RP45.000', // Tambahkan harga untuk Product 2
-                      },
-                      {
-                        name: 'FRENCH FRIES',
-                        image: 'MENU/french-fries.jpg',
-                        price: 'RP30.000', // Tambahkan harga untuk Product 3
-                      },
-                      {
-                        name: 'CHCKEN LEG',
-                        image: 'MENU/CHICKEN LEG.jpg',
-                        price: 'RP25.000', // Tambahkan harga untuk Product 4
-                      },
-                    ],
-                    cart: [], // Menyimpan item yang ditambahkan ke keranjang
-                  };
+          data() {
+            return {
+              products: [
+                {
+                  name: 'BURGER',
+                  image: 'MENU/Burger.jpg',
+                  price: 'RP30.000', // Tambahkan harga untuk Product 1
                 },
-                methods: {
-                addToCart(product) {
-                  // Cek apakah produk sudah ada di keranjang
-                  const existingItem = this.cart.find(item => item.name === product.name);
-
-                  if (existingItem) {
-                    // Jika sudah ada, tingkatkan jumlahnya
-                    existingItem.quantity++;
-                  } else {
-                    // Jika belum ada, tambahkan produk ke keranjang
-                    const price = parseFloat(product.price.replace('RP', '').replace('.', '').replace(',', ''));
-                    this.cart.push({ name: product.name, quantity: 1, price });
-                  }
+                {
+                  name: 'PIZZA',
+                  image: 'MENU/hawaiian-pizza.jpg',
+                  price: 'RP45.000', // Tambahkan harga untuk Product 2
                 },
-                clearCart() {
-                  // Hapus semua item dari keranjang
-                  this.cart = [];
+                {
+                  name: 'FRENCH FRIES',
+                  image: 'MENU/french-fries.jpg',
+                  price: 'RP30.000', // Tambahkan harga untuk Product 3
                 },
-              },
-              });
+                {
+                  name: 'CHICKEN LEG',
+                  image: 'MENU/CHICKEN LEG.jpg',
+                  price: 'RP25.000', // Tambahkan harga untuk Product 4
+                },
+              ],
+              cart: [], // Menyimpan item yang ditambahkan ke keranjang
+            };
+          },
+          methods: {
+            addToCart(product) {
+              // Cek apakah produk sudah ada di keranjang
+              const existingItem = this.cart.find(item => item.name === product.name);
 
+              if (existingItem) {
+                // Jika sudah ada, tingkatkan jumlahnya
+                existingItem.quantity++;
+              } else {
+                // Jika belum ada, tambahkan produk ke keranjang
+                const price = parseFloat(product.price.replace('RP', '').replace('.', '').replace(',', ''));
+                this.cart.push({ name: product.name, quantity: 1, price });
+              }
+            },
+            clearCart() {
+              // Hapus semua item dari keranjang
+              this.cart = [];
+            },
+            removeFromCart(index) {
+              this.cart.splice(index, 1); // Hapus item dari keranjang berdasarkan indeks
+            },
+          },
+          computed: {
+          total() {
+            // Menghitung total harga semua produk dalam keranjang
+            return this.cart.reduce((acc, item) => acc + item.quantity * item.price, 0);
+          },
+          },
+        });
 
-      app.mount('#app');
+        app.mount('#app');
+
   </script>
         
  </div>
